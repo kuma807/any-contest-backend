@@ -1,6 +1,7 @@
-const bcrypt = require('bcrypt')
-const usersRouter = require('express').Router()
-const User = require('../models/user')
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const usersRouter = require('express').Router();
+const User = require('../models/user');
 
 usersRouter.post('/', async (request, response) => {
   const body = request.body
@@ -14,9 +15,22 @@ usersRouter.post('/', async (request, response) => {
     passwordHash,
   })
 
-  const savedUser = await user.save()
+  const savedUser = await user.save((err, user) => {
+    if (err) {
+      console.log(err);
+      response.send(400, 'couldnt save user in backend/controllers/users');
+    }
+  })
+  const userForToken = {
+    id: user.id,
+    name: user.name,
+  }
 
-  response.json(savedUser)
+  const token = jwt.sign(userForToken, process.env.SECRET);
+
+  response
+    .status(200)
+    .send({ token, userid: user.id, name: user.name });
 })
 
 usersRouter.get('/', async (request, response) => {

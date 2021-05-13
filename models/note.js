@@ -6,7 +6,7 @@ const noteSchema = new mongoose.Schema({
     required: true,
     minlength: 5
   },
-  date: Date,
+  date: String,
   important: Boolean,
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -22,4 +22,4 @@ noteSchema.set('toJSON', {
   }
 })
 
-module.exports = mongoose.model('Note', noteSchema)
+module.exports = mongoose.model('Note', noteSchema);
