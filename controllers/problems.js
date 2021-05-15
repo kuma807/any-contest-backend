@@ -61,7 +61,6 @@ ProblemsRouter.get('/:name', async (request, response) => {
 
   const contest = (await Contest.find({"name": contestName}, {startTime: 1}))[0];
   const time = getTime();
-  console.log(time, contest.startTime);
   if (time < contest.startTime) {
     console.log("you can not see the problem before the starting time");
     response.status(404).end();

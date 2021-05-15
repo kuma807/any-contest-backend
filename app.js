@@ -1,6 +1,7 @@
 const config = require('./utils/config')
 const express = require('express')
 const mongoose = require('mongoose')
+const path = require('path');
 const app = express()
 require('express-async-errors')
 const cors = require('cors')
@@ -38,6 +39,9 @@ app.use('/api/contests', contestsRouter)
 app.use('/api/problems', problemsRouter)
 app.use('/api/submissions', submissionsRouter)
 app.use('/api/answers', answersRouter)
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 if (process.env.NODE_ENV === 'test') {
   const testingRouter = require('./controllers/testing')

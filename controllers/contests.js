@@ -185,6 +185,11 @@ ContestRouter.get('/:name', async (request, response) => {
   const time = getTime();
   if (contest[0].startTime > time) {
     contest[0].problemNames = [];
+    //__v === contestStarted
+    contest[0].__v = false;
+  }
+  else {
+    contest[0].__v = true;
   }
   if (contest) {
     response.json(contest.map(contest => contest.toJSON()));
