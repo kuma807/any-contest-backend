@@ -6,6 +6,8 @@ const submissionSchema = new mongoose.Schema({
     required: true,
     minlength: 1
   },
+  problemName: String,
+  contestName: String,
   time: String,
   state: String,
   answer: String

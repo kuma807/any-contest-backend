@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const user = new mongoose.Schema({ name: String, id: String, rank: Number, score: Number});
+const user = new mongoose.Schema({ name: String, id: String, point: Number, solved: [String], submissionTime: String});
 
 const contestSchema = new mongoose.Schema({
   name: {

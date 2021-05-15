@@ -7,6 +7,7 @@ const problemSchema = new mongoose.Schema({
     minlength: 1,
     unique: true,
   },
+  point: Number,
   writer: String,
   contest: String,
   problemStatement: String,

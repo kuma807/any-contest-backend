@@ -10,6 +10,7 @@ const getTokenFrom = request => {
   return null;
 }
 
+//create answer
 AnswerRouter.post('/', async (request, response) => {
   const body = request.body;
   const token = getTokenFrom(request);

@@ -39,10 +39,12 @@ fieldsRouter.post('/', async (request, response) => {
   response.json(savedField)
 })
 
-//get field names
+//get field name and discription
 fieldsRouter.get('/name', async (request, response) => {
   const fields = await Field.find({});
-  const fieldNames = fields.map((field) => field.name);
+  const fieldNames = fields.map((field) => {
+    return Array.from([field.name, field.description]);
+  });
   response.json(fieldNames);
 })
 
