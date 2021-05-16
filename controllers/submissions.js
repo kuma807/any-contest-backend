@@ -49,32 +49,55 @@ SubmissionRouter.post('/', async (request, response) => {
   }
 
   //update point
-  if (state === "OK" && contest.startTime < time && time < contest.endTime) {
+  if (contest.startTime < time && time < contest.endTime) {
     const ranking = contest["ranking"];
     const user = ranking.filter((u) => u.id === decodedToken.id);
-    
+    //loged in && have not solved
     if (user.length !== 0 && !user[0].solved.includes(body.problemName)) {
-      const point = (await Problem.find({name: body.problemName}, {point: 1}))[0]["point"];
-      const newSolved = user[0].solved.concat(body.problemName);
-      const newRanking = ranking.map((u) => {
-        if (u.id === decodedToken.id) {
-          u.solved = newSolved;
-          u.point = u.point + point;
-          u.submissionTime = time;
-        }
-        return u;
-      })
-      Contest.updateOne(
-        { name: body.contestName},
-        { ranking: newRanking }, function (err, docs) {
-          if (err){
-              console.log(err)
+      if (state === "OK") {
+        const point = (await Problem.find({name: body.problemName}, {point: 1}))[0]["point"];
+        const newSolved = user[0].solved.concat(body.problemName);
+        const newRanking = ranking.map((u) => {
+          if (u.id === decodedToken.id) {
+            u.solved = newSolved;
+            u.point = u.point + point;
+            u.submissionTime = time;
+            u.numPenalty = u.numPenalty + u.invalidNumPenalty;
+            u.invalidNumPenalty = 0;
           }
-          else{
-              console.log("Updated Docs");
+          return u;
+        })
+        Contest.updateOne(
+          { name: body.contestName},
+          { ranking: newRanking }, function (err, docs) {
+            if (err){
+                console.log(err)
+            }
+            else{
+                console.log("Updated Docs");
+            }
           }
-        }
-      );
+        );
+      }
+      else {
+        const newRanking = ranking.map((u) => {
+          if (u.id === decodedToken.id) {
+            u.invalidNumPenalty = u.invalidNumPenalty + 1;
+          }
+          return u;
+        })
+        Contest.updateOne(
+          { name: body.contestName},
+          { ranking: newRanking }, function (err, docs) {
+            if (err){
+                console.log(err)
+            }
+            else{
+                console.log("Updated Docs");
+            }
+          }
+        );
+      }
     }
   }
 

@@ -13,6 +13,7 @@ const contestsRouter = require('./controllers/contests')
 const problemsRouter = require('./controllers/problems')
 const submissionsRouter = require('./controllers/submissions')
 const answersRouter = require('./controllers/answers')
+const ratingsRouter = require('./controllers/ratings')
 const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
 
@@ -39,6 +40,7 @@ app.use('/api/contests', contestsRouter)
 app.use('/api/problems', problemsRouter)
 app.use('/api/submissions', submissionsRouter)
 app.use('/api/answers', answersRouter)
+app.use('/api/ratings', ratingsRouter)
 app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });

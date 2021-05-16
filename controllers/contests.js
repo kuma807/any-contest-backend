@@ -1,5 +1,6 @@
 const ContestRouter = require('express').Router();
 const Contest = require('../models/contest');
+const Rating = require('../models/rating')
 const jwt = require('jsonwebtoken');
 
 const fixTime = (time) => {
@@ -100,13 +101,15 @@ ContestRouter.post('/register/', async (request, response) => {
     return response.status(401).json({ error: 'token missing or invalid' })
   }
   const user = { 
-    name: decodedToken.id,
+    name: decodedToken.name,
     id: decodedToken.id,
     point: 0,
     solved: [],
-    submissionTime: "2000-00-00 00:00:00"
+    submissionTime: "2000-01-01 00:00:00",
+    invalidNumPenalty: 0,
+    numPenalty: 0
   }
-  const contest = (await Contest.find({"name": contestName}, {ranking: 1, startTime: 1}))[0];
+  const contest = (await Contest.find({"name": contestName}, {ranking: 1, startTime: 1, field: 1}))[0];
   const time = getTime();
   if (contest.startTime < time) {
     console.log("you can not register after the contest started");
@@ -127,6 +130,15 @@ ContestRouter.post('/register/', async (request, response) => {
         }
       }
     );
+    const rating = await Rating.find({"userid": decodedToken.id, fieldName: contest["field"]});
+    if (rating.length === 0) {
+      const newRating = new Rating({
+        userid: decodedToken.id,
+        fieldName: contest["field"],
+        ratingData: []
+      });
+      const savedRating = await newRating.save();
+    }
   }
   else {
     console.log("already registered");
