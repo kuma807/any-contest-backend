@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node node_modules/cross-env/src/bin/cross-env.js NODE_ENV=production node index.js",
+    "admin": "node node_modules/cross-env/src/bin/cross-env.js NODE_ENV=admin node index.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
     "build:ui": "rm -rf build && cd ../frontend/ && npm run build --prod && cp -r build ../backend",
