@@ -109,7 +109,7 @@ RatingRouter.post('/calculate', async (request, response) => {
     }
     else if (beforeTime !== rank.submissionTime) {
       beforeTime = rank.submissionTime;
-      contestResult.push(user);
+      contestResult.push([user]);
     }
     else {
       contestResult[contestResult.length - 1].push(user);
