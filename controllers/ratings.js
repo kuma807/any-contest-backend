@@ -157,4 +157,12 @@ RatingRouter.get('/userid/:userid', async (request, response) => {
   response.json(rating);
 })
 
+RatingRouter.get('/fieldName/:fieldName', async (request, response) => {
+  const fieldName = request.params.fieldName;
+  const rating = await Rating.find({
+    fieldName: fieldName
+  });
+  response.json(rating);
+})
+
 module.exports = RatingRouter; 
