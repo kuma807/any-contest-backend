@@ -37,9 +37,6 @@ ProblemsRouter.post('/', async (request, response) => {
   if (!token || !decodedToken.id) {
     return response.status(401).json({ error: 'token missing or invalid' })
   }
-  if (decodedToken.id !== process.env.ADMIN_ID) {
-    return response.status(401).json({ error: 'forbidden operation' });
-  }
 
   const problem = new Problem({
     name: body.name,
@@ -57,13 +54,19 @@ ProblemsRouter.post('/', async (request, response) => {
 //get problem by name
 ProblemsRouter.get('/:name', async (request, response) => {
   const problem = await Problem.find({name: request.params.name});
+  console.log(problem);
+  if (problem.length === 0) {
+    response.send("not found");
+    return;
+  }
   const contestName = problem[0].contest;
 
   const contest = (await Contest.find({"name": contestName}, {startTime: 1}))[0];
+  console.log(contest);
   const time = getTime();
   if (time < contest.startTime) {
     console.log("you can not see the problem before the starting time");
-    response.status(404).end();
+    response.status(400).end();
     return;
   }
 
@@ -71,7 +74,7 @@ ProblemsRouter.get('/:name', async (request, response) => {
     response.json(problem.map(problem => problem.toJSON()));
   } 
   else {
-    response.status(404).end()
+    response.status(404).end();
   }
 })
 

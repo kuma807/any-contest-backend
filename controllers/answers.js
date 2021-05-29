@@ -18,9 +18,6 @@ AnswerRouter.post('/', async (request, response) => {
   if (!token || !decodedToken.id) {
     return response.status(401).json({ error: 'token missing or invalid' })
   }
-  if (decodedToken.id !== process.env.ADMIN_ID) {
-    return response.status(401).json({ error: 'forbidden operation' });
-  }
 
   const answer = new Answer({
     name: body.name,
