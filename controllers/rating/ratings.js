@@ -1,7 +1,7 @@
-const Rating = require('../models/rating');
+const Rating = require('../../models/rating');
 const RatingRouter = require('express').Router();
 const glicko2 = require('glicko2');
-const Contest = require('../models/contest');
+const Contest = require('../../models/contest');
 const jwt = require('jsonwebtoken');
 
 var settings = {

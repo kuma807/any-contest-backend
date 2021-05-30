@@ -39,7 +39,6 @@ const getTokenFrom = request => {
 //create contest
 ContestRouter.post('/', async (request, response) => {
   const body = request.body;
-  console.log(body.field);
   const token = getTokenFrom(request);
   const decodedToken = jwt.verify(token, process.env.SECRET);
   if (!token || !decodedToken.id) {
@@ -52,7 +51,7 @@ ContestRouter.post('/', async (request, response) => {
   const contest = new Contest({
     name: body.name,
     field: body.field,
-    ranking: [],
+    ranking: body.ranking ? body.ranking: [],
     description: body.description,
     minRating: body.minRating,
     maxRating: body.maxRating,
@@ -144,6 +143,38 @@ ContestRouter.post('/register/', async (request, response) => {
   else {
     console.log("already registered");
     response.status(404).end();
+  }
+})
+
+//twitter register
+ContestRouter.post('/twitter_register/', async (request, response) => {
+  const body = request.body;
+  const token = getTokenFrom(request);
+  const decodedToken = jwt.verify(token, process.env.SECRET);
+  if (!token || !decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+  if (decodedToken.id !== process.env.ADMIN_ID) {
+    return response.status(401).json({ error: 'forbidden operation' });
+  }
+
+  const user = { 
+    name: body.name,
+    id: body.id,
+    point: 0,
+    solved: [],
+    submissionTime: "2000-01-01 00:00:00",
+    invalidNumPenalty: 0,
+    numPenalty: 0
+  }
+  const rating = await Rating.find({"userid": body.id, fieldName: body.field});
+  if (rating.length === 0) {
+    const newRating = new Rating({
+      userid: body.id,
+      fieldName: body.field,
+      ratingData: []
+    });
+    const savedRating = await newRating.save();
   }
 })
 

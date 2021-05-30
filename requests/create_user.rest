@@ -1,8 +1,9 @@
 POST http://localhost:3001/api/users/
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InVoc1VndzUyang5VCIsIm5hbWUiOiJhIiwiaWF0IjoxNjIwNjEyMzI2fQ.6fuBLtVIBsjWTsfqstmtBWvTOWiJJrx2zNvV1WRkNf4
 
 {
-    "id": "user1",
+    "id": "@tem",
     "name": "a",
     "password": "weakpassword"
 }

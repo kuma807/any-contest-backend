@@ -13,7 +13,7 @@ const contestsRouter = require('./controllers/contests')
 const problemsRouter = require('./controllers/problems')
 const submissionsRouter = require('./controllers/submissions')
 const answersRouter = require('./controllers/answers')
-const ratingsRouter = require('./controllers/ratings')
+const ratingsRouter = require('./controllers/rating/ratings')
 const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
 
